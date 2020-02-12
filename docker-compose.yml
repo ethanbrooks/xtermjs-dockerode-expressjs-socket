@@ -2,15 +2,27 @@ version: "3"
 
 services:
   web:
-    build: .
+    build: docker/npm-cli
     volumes:
-      - ./:/usr/src/app
+      - ./:/usr/app
     ports:
-      - ${XTERMJS_PORT:3000}:3000
+      - 3000:3000
     command: ["npm", "start"]
 
   watch:
-    build: .
+    build: docker/npm-cli
     volumes:
-      - ./:/usr/src/app
+      - ./:/usr/app
     command: ["npm", "run", "watch"]
+
+  npm_cli:
+    build: docker/npm-cli
+    container_name: "npm_cli"
+    volumes:
+      - .:/usr/app/
+    working_dir: /usr/app/
+    ports:
+      - 4200:4200
+    command: >
+      bash -c "npm i && ng serve --host 0.0.0.0"
+
